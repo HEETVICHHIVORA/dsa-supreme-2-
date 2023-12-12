@@ -119,19 +119,36 @@ root->right= createtree( pre, in, preindex, position+1,inorderend, size);
 return root ;
 }
 
+Node * createtree2(int post[],int in[],int &postindex,int inorderstart ,int inorderend,int size){
+if(postindex<0||inorderstart>inorderend){
+    return NULL;
+}
+int element = post[postindex];
+postindex--;
+Node* root = new Node(element);
+int position  = searchinorder(in,size,element);
+root->right= createtree2( post, in, postindex, position+1,inorderend, size);
+root->left = createtree2( post, in, postindex,inorderstart,position-1, size);
+
+return root ;
+}
+
 
 
 
 int main (){
-    int pre[]={2,8,10,6,4,12};
-    int in []={10,8,6,2,4,12};
+
+    int post[]={8,6,14,4,10,2};
+    int in []={8,14,6,2,10,4};
     int size = 6;
     int preindex = 0 ;
+    int postindex = size-1 ;
     int inoderindex= 0 ;
     int inorderstart = 0 ;
     int  indorderend = 5;
     
-Node* root =  createtree( pre, in, preindex, inorderstart , indorderend, size);
+
+Node* root = createtree2(post, in, postindex, inorderstart , indorderend, size);
 leveltrav(root);
     return 0 ;
 } 
