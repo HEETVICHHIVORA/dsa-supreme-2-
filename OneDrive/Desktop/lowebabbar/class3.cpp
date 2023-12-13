@@ -1,69 +1,86 @@
-#include<iostream>
-#include<queue>
-using namespace std; 
+#include <iostream>
+#include <queue>
+using namespace std;
 class Node
 {
 public:
-  int data;
-  Node *left;
-  Node *right;
-  Node(int val)
-  {
-    this->data = val;
-    this->left = NULL;
-    this->right = NULL;
-  }
+    int data;
+    Node *left;
+    Node *right;
+    Node(int val)
+    {
+        this->data = val;
+        this->left = NULL;
+        this->right = NULL;
+    }
 };
 Node *create()
 {
-  int data;
-  cin >> data;
-  if (data == -1)
-  {
-    return NULL;
-  }
-  Node *newNode = new Node(data);
-  newNode->left = create();
-  newNode->right = create();
-  return newNode;
+    int data;
+    cin >> data;
+    if (data == -1)
+    {
+        return NULL;
+    }
+    Node *newNode = new Node(data);
+    newNode->left = create();
+    newNode->right = create();
+    return newNode;
 }
 void leveltrav(Node *root)
 {
-  if (!root)
-    return;
+    if (!root)
+        return;
 
-  queue<Node *> q;
-  q.push(root);
+    queue<Node *> q;
+    q.push(root);
 
-  while (!q.empty())
-  {
-    int n = q.size();
-
-    for (int i = 1; i <= n; i++)
+    while (!q.empty())
     {
-      Node *front = q.front();
-      q.pop();
+        int n = q.size();
 
-      if (i == 1)
-      {
-        cout << front->data << " ";
-      }
+        for (int i = 1; i <= n; i++)
+        {
+            Node *front = q.front();
+            q.pop();
 
-      if (front->left)
-      {
-        q.push(front->left);
-      }
-      if (front->right)
-      {
-        q.push(front->right);
-      }
+            if (i == 1)
+            {
+                cout << front->data << " ";
+            }
+
+            if (front->left)
+            {
+                q.push(front->left);
+            }
+            if (front->right)
+            {
+                q.push(front->right);
+            }
+        }
     }
-  }
+}
+void printlhs(Node* root,int level , vector<int> &lhs){
+    if(root==NULL){
+        return ;
+    }
+    if(level==lhs.size()){
+       lhs.push_back(root->data);    
+    }
+    printlhs(root->left,level+1,lhs);
+    printlhs(root->right,level+1,lhs);
+
 }
 
-int main (){
-     Node* root= create();
-     leveltrav(root);
+int main()
+{
+    Node *root = create();
+    vector<int>lhs;
+    int level = 0;
+   printlhs(root,level,lhs);
+   for(int i=0;i<lhs.size();i++){
+    cout<<lhs[i]<<" ";
+   }
 
-    return 0 ;
+    return 0;
 }
