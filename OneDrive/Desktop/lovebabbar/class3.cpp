@@ -25,8 +25,8 @@ Node *create()
         return NULL;
     }
     Node *newNode = new Node(data);
-    newNode->left = create();
     newNode->right = create();
+    newNode->left = create();
     return newNode;
 }
 void leveltrav(Node *root)
@@ -127,17 +127,80 @@ void printingBottomView(Node* root){
     }
 
 }
-int main()
+void printleftboundary(Node* root,vector<int>& ans){
+    if(root==NULL){
+        return ;
+    }
+    if(root->left==NULL && root->right ==NULL){
+        return ;
+    }
+    ans.push_back(root->data);
+    if(root->left!=NULL){
+        printleftboundary(root->left,ans);
+    }
+    else{
+         printleftboundary(root->right,ans);
+    }
+}
+void printleaf(Node * root,vector<int>&ans){
+    if(root==NULL){
+        return;
+    }
+    if(root->right ==NULL && root->left==NULL){
+        ans.push_back(root->data);
+        return ;
+    }
+    printleaf(root->left,ans);
+    printleaf(root->right,ans);
+}
+void printrightboundary(Node* root,vector<int>& ans){
+    if(root==NULL){
+        return ;
+    }
+    if(root->left==NULL && root->right ==NULL){
+        return ;
+    }
+   
+    if(root->right!=NULL){
+        printrightboundary(root->right,ans);
+    }
+    else{
+         printrightboundary(root->left,ans);
+    }
+     ans.push_back(root->data);
+}
+void boundary (Node* root,vector<int>&ans){
+    if(root==NULL){
+        return;
+    }
+    // if(root->left==NULL&&root->right==NULL){
+    //     ans.push_back(root->data);
+    //     return ;
+    // }
+    if(root->left){
+        printleftboundary(root->left,ans);
+    }
+    printleaf(root,ans);
+    if(root->right){
+         printrightboundary(root->right,ans);
+    }
+    
+}
+int  main()
 {
     //10 20 40 -1 -1 50 70 110 -1  -1 111 -1 -1 80 -1 -1 30 -1 60 -1 90 112 -1 -1 113 -1 -1//
+    
     Node *root = create();
-    vector<int>lhs;
-    int level = 0;
-//    printlhs(root,level,lhs);
-//    for(int i=0;i<lhs.size();i++){
-//     cout<<lhs[i]<<" ";
-//    }
-printingBottomView(root);
-
-    return 0;
+    vector<int> ans ;
+        ans.push_back(root->data);
+        if(root->right!=NULL || root->left!=NULL){
+              boundary(root,ans);
+        }
+        for(int i=0;i<ans.size();i++){
+            cout<<ans[i]<<" ";
+        }
+      
+        return 0 ;
+    
 }
+
